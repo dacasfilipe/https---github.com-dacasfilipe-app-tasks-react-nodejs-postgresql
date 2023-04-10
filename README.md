@@ -32,6 +32,7 @@ Para iniciar o servidor, execute o seguinte comando:
 
 nodemon app
 
+A aplicação está configurada para rodar em http://localhost:3001/
 
 ## Endpoints
 
