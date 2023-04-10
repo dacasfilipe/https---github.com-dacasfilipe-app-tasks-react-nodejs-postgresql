@@ -1,7 +1,18 @@
 const express = require('express');
 const app = express();
 const port = 3001;
+const bodyParser = require('body-parser');
 
+// Configura o body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//Arquivo com rotas para o cadastro de livros para
+const livros = require('./livros');
+
+app.use('/livros',livros); //identificação da rota e da const livros associada
+
+//Exemplo de rota
 app.get('/', (req, res) => {
     res.send('Hello World!');
 }); 
