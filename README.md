@@ -51,17 +51,25 @@ nodemon app
 }
 ```
 ### 2. Listar Livros
+
 URL: /livros
+
 Método: GET
 
 ### 3. Obter Livro por ID
+
 URL: /livros/:id
+
 Método: GET
 
 ### 4. Atualizar Livro 
+
 //insira os valores que deseja atualizar no body
+
 URL: /livros/:id
+
 Método: PUT
+
 Body:
 ```json
 {
@@ -74,11 +82,15 @@ Body:
 ```
 
 ### 5. Remover Livro
+
 //em :id substitua pelo id do livro que deseja excluir do banco de dados
+
 URL: /livros/:id
+
 Método: DELETE
 
 
 ### Licença
+
 Este projeto está licenciado sob a licença MIT.
 
