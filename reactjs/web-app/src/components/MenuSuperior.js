@@ -10,7 +10,7 @@ const MenuSuperior = () => {
                         <Link to="/" className="nav-link">Inclusão</Link>
                     </li>
                     <li>
-                        <Link to="/lista" className="nav-link">Manutenção</Link>
+                        <Link to="/manut" className="nav-link">Manutenção</Link>
                     </li>
                     <li>
                         <Link to="/resumo" className="nav-link">Resumo</Link>
