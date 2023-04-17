@@ -1,7 +1,10 @@
 const express = require('express');
+const cors = require("cors");
 const app = express();
 const port = 3001;
 const bodyParser = require('body-parser');
+// middleware CORS adiconado antes das rotas para permitir acesso de outros domínios
+app.use(cors());
 
 // Configura o body-parser
 app.use(bodyParser.json());
@@ -40,6 +43,6 @@ app.get('/transfere', log, (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`App livros rodando em http://localhost:${port}`);
 })
 

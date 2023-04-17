@@ -1,22 +1,45 @@
+import {useState, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
+import {inAxios} from '../config_axios';
 
 const InclusaoLivros = () => {
     //register serve para definir os nomes dos campos do formulário e validações
     //handleSubmit serve para indicar o método a ser chamado quando o formulario for enviado pelo onSubmit
-    const {register, handleSubmit} = useForm();
+    //reset, para atribuir um valor para os campos registrados (limpar os dados do formulário)
+    const {register, handleSubmit, reset} = useForm();
+
+    const [aviso, setAviso] = useState('');
 
     //método chamado ao enviar o formulario(onSubmit)
-    const salvar = (campos) => {
-        //JSON.stringify() serve para transformar um objeto Javascript em uma string JSON
-        alert(JSON.stringify(campos));
+    const salvar = async (campos) => {
+        try{
+            const response = await inAxios.post('livros', campos);
+            setAviso(`Ok! Livro cadastrado com código ${response.data.id}`);
+            limparFormulario();
+        }catch(error){
+            setAviso(`Erro...livro não cadastrado: ${error}`);
+        }
     }
+    useEffect(() => {
+        const timer = setTimeout(() => {
+          setAviso("");
+        }, 5000);
+    
+        return () => clearTimeout(timer);
+      }, [aviso]);
+    
+      const limparFormulario = () => {
+        reset({ titulo: "", autor: "", foto: "", ano: "", preco: "" });
+      }; 
+   
+    
     return (
         <div className="container">
             <h4 className="fst-italic mt-3">Inclusão </h4>
             <form onSubmit={handleSubmit(salvar)}>
                 <div className="form-group">
                     <label htmlFor="titulo">Título:</label>
-                    <input type="text" className="form-control" id="titulo" required autofocus {...register("titulo")}/>
+                    <input type="text" className="form-control" id="titulo" required autoFocus {...register("titulo")}/>
                 </div>
                 <div className="form-group mt-2">
                     <label htmlFor="autor">Autor:</label>
@@ -43,7 +66,7 @@ const InclusaoLivros = () => {
                 <input type="submit" className="btn btn-primary mt-3" value="Enviar"/>
                 <input type="reset" className="btn btn-danger mt-3 ms-3" value="Limpar"/>
             </form>
-            <div className="alert"></div>
+            <div className={aviso.startsWith("Ok!")? "alert alert-sucess" : aviso.startsWith("Erro:")? "alert alert-danger" : ""}>{aviso}</div>
         </div>
     );
 };
