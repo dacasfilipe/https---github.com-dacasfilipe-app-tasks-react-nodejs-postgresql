@@ -35,7 +35,35 @@ const filtrarLista = async (campos) => {
 
 }
 
+const excluir = async(id,titulo) => {
+    if(!window.confirm(`Confirma a exclusão do livro ${titulo}?`)){
+        return;
+    }
+    try{
+        await inAxios.delete(`livros/${id}`);
+        setLivros(livros.filter(livro => livro.id !== id));
+        
+    }catch(error){
+        alert(`Erro: ..Não foi possível excluir o livro ${titulo}: ${error}`);
+    }
+}
 
+//alterar os registros
+const alterar = async (id,titulo,index) => {
+    const novoPreco = Number(prompt(`Digite o novo preço do livro ${titulo}`));
+    if (isNaN(novoPreco)){
+        return;
+    }
+    try{
+        await inAxios.put(`livros/${id}`,{preco: novoPreco});
+        const livrosAtualizados = [...livros];
+        livrosAtualizados[index].preco = novoPreco;
+        setLivros(livrosAtualizados);
+    }catch(error){
+        alert(`Erro: ..Não foi possível alterar o livro ${titulo}: ${error}`);
+    }
+
+}
     return (
        <div className="container">
         <div className="row">
@@ -75,6 +103,8 @@ const filtrarLista = async (campos) => {
                         ano={livro.ano}
                         preco={livro.preco}
                         foto={livro.foto}
+                        excluirClick={()=>excluir(livro.id,livro.titulo)}
+                        alterarClick={()=>alterar(livro.id,livro.titulo)}
                     />
                 ))}
             </tbody>
