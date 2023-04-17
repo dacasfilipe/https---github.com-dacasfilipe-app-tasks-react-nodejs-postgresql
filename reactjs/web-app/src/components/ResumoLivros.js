@@ -4,32 +4,30 @@ import {inAxios} from "../config_axios";
 
 
 const ResumoLivros = () => {
-    //return <h2>Resumo</h2>
-    const [resumo, setResumo] = useState([]);
-    const [grafico, setGrafico] = useState([]);
+  const [resumo, setResumo] = useState([]);
+  const [grafico, setGrafico] = useState([]);
+   
+    // Define o método que será executado assim que o componente for renderizado
+  useEffect(() => {
     const obterDados = async () => {
-        try{
-            const dadosResumo = await inAxios.get("livros/dados/resumo");
-            setResumo(dadosResumo.data);
+      try {
+        const dadosResumo = await inAxios.get("livros/dados/resumo");
+        setResumo(dadosResumo.data);
 
-            const dadosGrafico = await inAxios.get("livros/dados/grafico");
-            //cria uma array e adiciona a primeira linha do grafico
-            const arrayGrafico = [["Ano", "R$ Total"]];
-            //percorre cada linha do JSON e adiciona no array
-            dadosGrafico.data.map((dado) => {
-                arrayGrafico.push([dado.ano.toString(), dado.total]);
-            });
-            setGrafico(arrayGrafico);
-        }catch(error){
-            alert(`Erro: ..Não foi possível obter os dados: ${error}`);
-        }
-    }
+        const dadosGrafico = await inAxios.get("livros/dados/grafico");
+        const arrayGrafico = [["Ano", "R$ Total"]];
+        dadosGrafico.data.forEach((dado) => {
+            arrayGrafico.push([dado.ano, parseInt(dado.total)]);
+        });
+        setGrafico(arrayGrafico);
+        } catch (error) {
+        alert(`Erro: ..Não foi possível obter os dados: ${error}`);
+      }
+    };
 
-
-//define o método que será executado assim que o componente for renderizado
-useEffect(() => {
     obterDados();
-},[]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 return(
     <div className="container">
@@ -57,17 +55,20 @@ return(
             <p>Preço médio dos livros</p>
         </span>
 
-        <div className='d-flex justify-content-center'>
+        <div className="d-flex justify-content-center">
             <Chart 
-                width={1000}
-                heigth={420}
+                width={'1000px'}
+                height={'420px'}
                 chartType="ColumnChart"
                 loader={<div>Carregando Gráfico...</div>}
                 data={grafico}
                 options={{
                     title: 'Total de Investimento em Livros - por Ano de Publicação',
                     chartArea: {width: '80%'},
-                    hAxis: {title: 'Ano de Publicação'},
+                    hAxis: {
+                        title: 'Ano de Publicação',
+                        format: '####', // Formato personalizado para o eixo X
+                      },
                     vAxis: {title: 'Preço Acumulado R$'}, 
                     legend: {position: 'none'},              
                     }
